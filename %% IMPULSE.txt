@@ -1,0 +1,490 @@
+%% IMPULSE
+function [x,n] = impulses(n0,n1,n2)
+
+n = n1:n2;
+
+x = (n == n0);
+
+stem(n,x,'r')
+
+grid on
+
+title('Unit Impulse Signal - Shivang Pant')
+xlabel('n')
+ylabel('Amplitude')
+-----------------------------------------------------------
+
+%% STEP
+function [x,n] = stepss(n0,n1,n2)
+
+n = n1:n2;
+
+x = n >= n0;
+
+stem(n,x,'r')
+
+grid on
+
+title('Unit Step Signal - Shivang Pant')
+xlabel('n')
+ylabel('Amplitude')
+----------------------------------------------------------
+
+%%SIGNUM
+function [x,n] = signum(n1,n2)
+
+n = n1:n2;
+
+x = sign(n);
+
+stem(n,x,'r')
+
+grid on
+
+title('Signum Signal - Shivang Pant')
+xlabel('n')
+ylabel('Amplitude')
+---------------------------------------------------------
+function squareecontinous()
+
+f = input("Enter the frequency: ");
+d = input("Enter the duty cycle: ");
+
+t = 0:0.001:2;
+
+x = square(2*pi*f*t,d);
+
+plot(t,x,'r','LineWidth',2)
+
+grid on
+
+title('Continuous Square Wave - Shivang Pant')
+xlabel('Time (t)')
+ylabel('Amplitude')
+
+---------------------------------------------------------
+function squareecontinous()
+
+f = input("Enter the frequency: ");
+d = input("Enter the duty cycle: ");
+
+t = 0:0.001:2;
+
+x = 2*(mod(f*t,1) < d/100) - 1;
+
+plot(t,x,'r','LineWidth',2)
+
+grid on
+
+title('Continuous Square Wave - Shivang Pant')
+xlabel('Time (t)')
+ylabel('Amplitude')
+------------------------------------------------------------
+function squareediscrete()
+
+f = input("Enter the frequency: ");
+
+d = input("Enter the duty cycle: ");
+
+n = 0:100;
+
+x = 2*(mod(f*n,1) < d/100) - 1;
+
+stem(n,x,'r')
+
+grid on
+
+title('Discrete Square Wave - Shivang Pant')
+xlabel('n')
+ylabel('Amplitude')
+--------------------------------------------------------
+function multisine()
+
+N = input("Enter the number of sinusoidal signals: ");
+
+t = 0:0.0001:2;
+
+x = zeros(size(t));
+
+for i = 1:N
+
+    A = input("Enter amplitude: ");
+    f = input("Enter frequency: ");
+    phi = input("Enter phase: ");
+
+    x = x + A*sin(2*pi*f*t + phi);
+
+end
+
+plot(t,x,'r','LineWidth',2)
+
+grid on
+
+title('Multi-Sinusoidal Signal - Shivang Pant')
+xlabel('Time (t)')
+ylabel('Amplitude')
+
+end
+--------------------------------------------------------
+function [y,n] = lineeearconnnvvv(x,h)
+
+lx = length(x);
+
+lh = length(h);
+
+ly = lx + lh - 1;
+
+y = zeros(1,ly);
+
+for n1 = 1:lx
+
+    for n2 = 1:lh
+
+        y(n1+n2-1) = y(n1+n2-1) + x(n1)*h(n2);
+
+    end
+
+end
+
+n = 0:ly-1;
+
+stem(n,y,'r')
+
+grid on
+
+title('Linear Convolution - Shivang Pant')
+xlabel('n')
+ylabel('Amplitude')
+
+end
+-------------------------------------------------------
+function X = ddffftt(x,N)
+
+x = [x zeros(1,N-length(x))];
+
+X = zeros(1,N);
+
+for k = 0:N-1
+
+    for n = 0:N-1
+
+        X(k+1) = X(k+1) + x(n+1) * exp(-2*pi*1i*k*n/N);
+
+    end
+
+end
+
+mag = abs(X);
+
+phase = angle(X);
+
+k = 0:N-1;
+
+subplot(2,1,1)
+stem(k,mag,'r','LineWidth',2)
+grid on
+title('Magnitude Spectrum - Shivang Pant')
+xlabel('k')
+ylabel('Magnitude')
+
+subplot(2,1,2)
+stem(k,phase,'r','LineWidth',2)
+grid on
+title('Phase Spectrum - Shivang Pant')
+xlabel('k')
+ylabel('Phase (radians)')
+
+end
+---------------------------------------------------
+function x = idf(X)
+
+N = length(X);
+
+x = zeros(1,N);
+
+for n = 0:N-1
+
+    for k = 0:N-1
+
+        x(n+1) = x(n+1) + X(k+1) * exp(2*pi*1i*k*n/N);
+
+    end
+
+    x(n+1) = x(n+1)/N;
+
+end
+
+n = 0:N-1;
+
+stem(n,real(x),'r','LineWidth',2)
+
+grid on
+
+title('Inverse DFT - Shivang Pant')
+xlabel('n')
+ylabel('Amplitude')
+
+end
+---------------------------------------------------
+function [y] = SP_CONV(x,h)
+
+N1 = length(x);
+N2 = length(h);
+
+N = max(N1,N2);
+
+x = [x, zeros(1,N-N1)];
+h = [h, zeros(1,N-N2)];
+
+y = zeros(1,N);
+
+for n = 1:N
+
+    y(1,n) = 0;
+
+    for i = 1:N
+
+        j = n-i+1;
+
+        if j <= 0
+            j = N+j;
+        end
+
+        y(1,n) = y(1,n) + x(1,i)*h(1,j);
+
+    end
+
+end
+
+disp('Circular Convolution:')
+disp(y)
+
+n = 0:N-1;
+
+stem(n,y,'r')
+grid on
+
+title('Circular Convolution - Shivang Pant')
+xlabel('n')
+ylabel('Amplitude')
+
+end
+---------------------------------------------------------
+
+function [y] = SP_CONV_LIN(x,h)
+
+N1 = length(x);
+N2 = length(h);
+
+N = max(N1,N2);
+
+z = zeros(1,N1+N2-1);
+
+for n = 1:N1
+
+    for i = 1:N2
+
+        z(n+i-1) = z(n+i-1) + x(n)*h(i);
+
+    end
+
+end
+
+disp('Linear Convolution:')
+disp(z)
+
+y = zeros(1,N);
+
+for i = 1:length(z)
+
+    j = mod(i-1,N) + 1;
+
+    y(j) = y(j) + z(i);
+
+end
+
+disp('Circular Convolution using Linear Convolution:')
+disp(y)
+
+n = 0:N-1;
+
+stem(n,y,'r')
+grid on
+
+title('Circular Convolution using Linear Convolution - Shivang Pant')
+xlabel('n')
+ylabel('Amplitude')
+
+end
+--------------------------------------------------------------
+function [y] = SP_CONV_DFT(x,h)
+
+N1 = length(x);
+N2 = length(h);
+
+N = max(N1,N2);
+
+x = [x, zeros(1,N-N1)];
+h = [h, zeros(1,N-N2)];
+
+X = zeros(1,N);
+
+for k = 1:N
+
+    for n = 1:N
+
+        X(k) = X(k) + x(n) * exp(-1i*2*pi*(k-1)*(n-1)/N);
+
+    end
+
+end
+
+H = zeros(1,N);
+
+for k = 1:N
+
+    for n = 1:N
+
+        H(k) = H(k) + h(n) * exp(-1i*2*pi*(k-1)*(n-1)/N);
+
+    end
+
+end
+
+Y = X .* H;
+
+y = zeros(1,N);
+
+for n = 1:N
+
+    for k = 1:N
+
+        y(n) = y(n) + Y(k) * exp(1i*2*pi*(k-1)*(n-1)/N);
+
+    end
+
+    y(n) = y(n)/N;
+
+end
+
+y = real(y);
+
+disp('Circular Convolution using DFT-IDFT:')
+disp(y)
+
+n = 0:N-1;
+
+stem(n,y,'r')
+grid on
+
+title('Circular Convolution using DFT-IDFT - Shivang Pant')
+xlabel('n')
+ylabel('Amplitude')
+
+end
+------------------------------------------------------------
+% Rectangular Window
+clc;
+clear all;
+close all;
+
+fp = input('Enter the pass band freq: ');
+tw = input('Enter the transition band freq: ');
+fs = input('Enter the sampling freq: ');
+
+fw = tw/fs;
+fc = fp + tw/2;
+
+N = floor(0.9/fw);
+a = zeros(1,N);
+
+for i = 1:N
+    a(i) = (-(N-1)/2) + i;
+end
+
+a = a + 0.0001;
+
+n = -(N-2)/2 : (N-2)/2;
+
+rectangular = ones(1,N);
+
+for i = 1:N
+    wc = 2*pi*fc/fs;
+
+    if a(i) == 0
+        hd(i) = 2*fc/fs;
+    else
+        hd(i) = 2*fc*sin(a(i)*wc)/(a(i)*wc);
+    end
+
+    h(i) = rectangular(i)*hd(i);
+end
+
+n1 = 0:N-1;
+f1 = abs(h);
+d1 = fft(f1);
+
+subplot(2,4,1);
+plot(n1,f1);
+title('Rectangular Window');
+xlabel('time');
+ylabel('amp');
+
+subplot(2,4,5);
+plot(n1,d1);
+title('Rectangular Window');
+xlabel('freq');
+ylabel('amp');
+------------------------------------------------------------------
+% Triangular Window
+clc;
+clear all;
+close all;
+
+fp = input('Enter the pass band freq: ');
+tw = input('Enter the transition band freq: ');
+fsample = input('Enter the sampling freq: ');
+
+fw = tw/fsample;
+fc = fp + tw/2;
+
+N = floor(3.1/fw);
+a = zeros(1,N);
+
+for i = 1:N
+    a(i) = -((N-1)/2) + i;
+end
+
+a = a + 0.0001;
+
+n = -(N-2)/2 : (N-2)/2;
+
+triangular = abs(2*a/N);
+
+for i = 1:N
+    wc = 2*pi*fc/fsample;
+
+    if a(i) == 0
+        hd(i) = 2*fc/fsample;
+    else
+        hd(i) = 2*fc*sin(a(i)*wc)/(a(i)*wc);
+    end
+
+    h(i) = triangular(i)*hd(i);
+end
+
+subplot(1,2,1);
+stem(a,h);
+title('FIR with Triangular Window');
+xlabel('n');
+ylabel('h(n)');
+
+[X2,x2] = freqz(h,1,2048);
+Xmax = max(abs(X2));
+X2 = 20*log10(abs(X2)/Xmax);
+
+subplot(1,2,2);
+plot(x2/pi,X2);
+title('Triangular Window Frequency Response');
+xlabel('f/pi');
+ylabel('dB');
