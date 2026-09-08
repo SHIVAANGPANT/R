@@ -521,3 +521,121 @@ unction windowResponse(N)
         ylabel('|W(f)|');
     end
 end
+--------------------------------------------------------------------------------
+% Name: Tushar Upadhiya
+% Roll Number: 1024150134
+% Sub group: 3014
+% Submitted to : Dr. Amit Kumar Kohli
+
+clc;
+clear;
+close all;
+
+M = 25;
+t = 0:1:M-1;
+A = ones(1, M);
+
+figure;
+stem(t, A, 'g');
+xlabel('-----> n ----->');
+ylabel('Amplitude ----->');
+title('Rectangular window with M=25');
+
+figure;
+[H, w] = freqz(A, 1, 1024);
+wN = w ./ (2*pi);
+HN = abs(H) ./ max(abs(H));
+plot(wN, 20*log10(HN), 'b');
+grid;
+xlabel('Normalized Frequency ----->');
+ylabel('Normalized Magnitude Response (dB) ----->');
+title('Frequency Response of Rectangular Window Function');
+hold on;
+
+M = 49;
+t = 0:1:M-1;
+AH = ones(1, M);
+[H, w] = freqz(AH, 1, 1024);
+wN = w ./ (2*pi);
+HN = abs(H) ./ max(abs(H));
+plot(wN, 20*log10(HN), 'r');
+hold off;
+legend('M=25', 'M=49');
+
+figure;
+M = 25;
+t = 0:1:M-1;
+AH = 0.54 - 0.46 * cos((2*pi*t) ./ (M-1));
+stem(t, AH, 'r');
+xlabel('-----> n ----->');
+ylabel('Amplitude ----->');
+title('Hamming window with M=25');
+
+figure;
+[H, w] = freqz(AH, 1, 1024);
+wN = w ./ (2*pi);
+HN = abs(H) ./ max(abs(H));
+plot(wN, 20*log10(HN), 'b');
+grid;
+xlabel('Normalized Frequency ----->');
+ylabel('Normalized Magnitude Response (dB) ----->');
+title('Frequency Response of Hamming Window Function');
+hold on;
+
+M = 49;
+t = 0:1:M-1;
+AH = 0.54 - 0.46 * cos((2*pi*t) ./ (M-1));
+[H, w] = freqz(AH, 1, 1024);
+wN = w ./ (2*pi);
+HN = abs(H) ./ max(abs(H));
+plot(wN, 20*log10(HN), 'r');
+hold off;
+legend('M=25', 'M=49');
+
+figure;
+M = 25;
+t = 0:1:M-1;
+AH = zeros(1, M);
+
+for k = 0:(M-1)/2
+    AH(1, k+1) = 2*k / (M-1);
+end
+
+for k = ((M-1)/2)+1 : (M-1)
+    AH(1, k+1) = 2 - ((2*k) / (M-1));
+end
+
+stem(t, AH, 'm');
+xlabel('-----> n ----->');
+ylabel('Amplitude ----->');
+title('Bartlett window with M=25');
+
+figure;
+[H, w] = freqz(AH, 1, 1024);
+wN = w ./ (2*pi);
+HN = abs(H) ./ max(abs(H));
+plot(wN, 20*log10(HN), 'b');
+grid;
+xlabel('Normalized Frequency ----->');
+ylabel('Normalized Magnitude Response (dB) ----->');
+title('Frequency Response of Bartlett Window Function');
+hold on;
+
+M = 49;
+t = 0:1:M-1;
+AH = zeros(1, M);
+
+for k = 0:(M-1)/2
+    AH(1, k+1) = 2*k / (M-1);
+end
+
+for k = ((M-1)/2)+1 : (M-1)
+    AH(1, k+1) = 2 - ((2*k) / (M-1));
+end
+
+[H, w] = freqz(AH, 1, 1024);
+wN = w ./ (2*pi);
+HN = abs(H) ./ max(abs(H));
+plot(wN, 20*log10(HN), 'r');
+hold off;
+legend('M=25', 'M=49');
