@@ -488,3 +488,36 @@ plot(x2/pi,X2);
 title('Triangular Window Frequency Response');
 xlabel('f/pi');
 ylabel('dB');
+------------------------------------------------------
+WINDOW BY ARHAM JAIN
+unction windowResponse(N)
+    rect = rectwin(N);
+    hamm = hamming(N);
+    hannw = hann(N);
+    black = blackman(N);
+    bart = bartlett(N);
+    
+    windows = {rect, hamm, hannw, black, bart};
+    names = {'Rectangular','Hamming','Hanning','Blackman','Bartlett'};
+    
+    for i = 1:5
+        w = windows{i};
+        W = fft(w,1024);
+        W = fftshift(abs(W));
+    
+        figure;
+        subplot(2,1,1);
+        stem(0:N-1,w,'filled');
+        grid on;
+        title([names{i} ' Window (Time Domain)']);
+        xlabel('Samples');
+        ylabel('Amplitude');
+    
+        subplot(2,1,2);
+        plot(linspace(-1,1,1024),W,'LineWidth',1.5);
+        grid on;
+        title([names{i} ' Window (Frequency Domain)']);
+        xlabel('Normalized Frequency');
+        ylabel('|W(f)|');
+    end
+end
